@@ -1,60 +1,29 @@
-import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
-import javax.swing.JPanel;
+import java.awt.event.ActionListener;
 import javax.swing.JButton;
-import javax.swing.JComboBox;
+import javax.swing.JPanel;
 
-/*
- * Represents the control panel in BalloonDraw.
- */
-public class ControlPanel extends JPanel
+
+
+public class ControlPanel
+        extends JPanel
+        implements ActionListener
 {
-    private DrawingPanel canvas;
-    private JButton colorButton, colorDisplay; //, balloonButton;
-    private JComboBox<String> chooseBalloonShape;
+    private CrapsTable table;
 
-    public ControlPanel(DrawingPanel canvas)
+    public ControlPanel(CrapsTable t)
     {
-        this.canvas = canvas;
-
-        colorButton = new JButton("Pick Color");
-        colorButton.addActionListener(new ColorButtonListener());
-
-        colorDisplay = new JButton();
-        colorDisplay.setBackground(canvas.getColor());
-        colorDisplay.setEnabled(false);
-
-        //balloonButton = new JButton("Add Balloon");
-        String[] balloonShapeNames = {"Round", "Oval", "Square", "Fancy"};
-        chooseBalloonShape = new JComboBox<String>(balloonShapeNames);
-        //balloonButton.addActionListener(new BalloonButtonListener());
-        chooseBalloonShape.addActionListener(new BalloonButtonListener());
-
-        add(colorButton);
-        add(colorDisplay);
-        //add(balloonButton);
-        add(chooseBalloonShape);
+        table = t;
+        JButton rollButton = new JButton("Roll");
+        rollButton.addActionListener(this);
+        add(rollButton);
     }
 
-    private class ColorButtonListener
-            implements ActionListener
-    {
-        public void actionPerformed(ActionEvent e)
-        {
-            canvas.pickColor();
-            colorDisplay.setBackground(canvas.getColor());
-            canvas.requestFocus();
-        }
-    }
 
-    private class BalloonButtonListener
-            implements ActionListener
+    public void actionPerformed(ActionEvent e)
     {
-        public void actionPerformed(ActionEvent e)
-        {
-            canvas.addBalloon(chooseBalloonShape.getSelectedIndex() + 1);
-            canvas.requestFocus();
+        if (!table.diceAreRolling()) {
+            table.rollDice();
         }
     }
 }
-
